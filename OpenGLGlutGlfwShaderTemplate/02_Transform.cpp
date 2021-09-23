@@ -47,6 +47,11 @@ using namespace std;
 #define X_AXIS glm::vec3(1,0,0)
 #define Y_AXIS glm::vec3(0,1,0)
 #define Z_AXIS glm::vec3(0,0,1)
+#define XY_AXIS glm::vec3(1,1,0)
+#define XZ_AXIS glm::vec3(1,0,1)
+#define YZ_AXIS glm::vec3(0,1,1)
+#define XZY_AXIS glm::vec3(1,1,1)
+
 
 static unsigned int
 program,
@@ -118,9 +123,13 @@ void init(void)
 void transformObject(float scale, glm::vec3 rotationAxis, float rotationAngle, glm::vec3 translation) {
 	glm::mat4 Model;
 	Model = glm::mat4(1.0f);
+	// First Pass is Translation
 	Model = glm::translate(Model, translation);
+	//Second Pass is Rotation
 	Model = glm::rotate(Model, glm::radians(rotationAngle), rotationAxis);
-	Model = glm::scale(Model, glm::vec3(scale));
+	// Third Pass is Scaling
+	Model = glm::scale(Model, glm::vec3(scale)); // Uniform scale
+	// Finally... matrix gets sent to vertex shader
 	glUniformMatrix4fv(modelID, 1, GL_FALSE, &Model[0][0]);
 }
 
